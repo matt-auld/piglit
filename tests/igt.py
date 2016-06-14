@@ -110,12 +110,20 @@ class IGTTest(Test):
         super(IGTTest, self).__init__(
             [os.path.join(IGT_TEST_ROOT, binary)] + arguments)
         self.timeout = 600
+        self.
 
     def interpret_result(self):
         super(IGTTest, self).interpret_result()
 
         if self.result.returncode == 0:
-            self.result.result = 'pass'
+            # if we filtered any warnings or errors from dmesg and as a result
+            # the test passed then we mark the test as xfail. Likewise if the
+            # test returned an error code, but we matched stderr to a known
+            # expected failure
+            if self.result.matched_xfail:
+                self.result.result = 'xfail'
+            else:
+                self.result.result = 'pass'
         elif self.result.returncode == 77:
             self.result.result = 'skip'
         elif self.result.returncode == 78:

@@ -129,9 +129,17 @@ class BaseDmesg(object):
         # Get a new snapshot of dmesg
         self.update_dmesg()
 
-        # if update_dmesg() found new entries replace the results of the test
-        # and subtests
         if self._new_messages:
+            # Filter out any known messages or splat which we want to disregard
+            # for this result before proceeding
+
+            if result.filter_xfail_dmseg:
+                for line in self._new_messages:
+                    if result.regex_filter.remove(line):
+                        result.matched_xfail = True;
+
+            # if update_dmesg() found new entries replace the results of the test
+            # and subtests
 
             if self.regex:
                 for line in self._new_messages:

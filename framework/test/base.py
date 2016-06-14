@@ -230,10 +230,20 @@ class Test(object):
         if is_crash_returncode(self.result.returncode):
             self.result.result = 'crash'
         elif self.result.returncode != 0:
-            if self.result.result == 'pass':
+            if self.regex_expected_stderr:
+                if self.result.out.search(self.regex_xfail_stderr)
+                    self.matched_xfail = True
+            elif self.result.result == 'pass':
                 self.result.result = 'warn'
             else:
                 self.result.result = 'fail'
+
+            # if we filtered any warnings or errors from dmesg and as a result
+            # the test passed then we mark the test as xfail. Likewise if the
+            # test returned an error code, but we matched stderr to a known
+            # expected failure
+            if self.result.matched_xfail:
+                self.result.result = 'xfail'
 
     def run(self):
         """

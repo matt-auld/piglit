@@ -168,6 +168,12 @@ class TestResult(object):
         else:
             self.__result = status.NOTRUN
 
+        # If this is set it should be an re.compile() object, which matches
+        # entries that are not to be considered failures
+        self.filter_dmesg_xfail = None
+        self.match_stderr_xfail = None
+        self.matched_xfail = False
+
     @property
     def result(self):
         """Return the result of the test.

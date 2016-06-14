@@ -66,6 +66,7 @@ from framework import exceptions, compat
 
 __all__ = ['NOTRUN',
            'PASS',
+           'XFAIL',
            'FAIL',
            'WARN',
            'CRASH',
@@ -237,6 +238,8 @@ SKIP = NoChangeStatus('skip')
 
 PASS = Status('pass', 0, (1, 1))
 
+XFAIL= Status('xfail', 0, (1, 1))
+
 WARN = Status('warn', 10)
 
 DMESG_WARN = Status('dmesg-warn', 20)
@@ -256,6 +259,7 @@ _STATUS_MAP = {
     'pass': PASS,
     'warn': WARN,
     'fail': FAIL,
+    'xfail': XFAIL,
     'crash': CRASH,
     'dmesg-warn': DMESG_WARN,
     'dmesg-fail': DMESG_FAIL,
